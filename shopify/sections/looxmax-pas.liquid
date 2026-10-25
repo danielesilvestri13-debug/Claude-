@@ -1,0 +1,118 @@
+{% comment %}
+  LOOXMAX — Sezione PAS (Problema / Agitazione / Soluzione) per la pagina prodotto.
+  Installazione: Shopify Admin → Negozio online → Temi → Modifica codice →
+  Sections → "Aggiungi una nuova sezione" → incolla questo file come looxmax-pas.liquid.
+  Poi nel Personalizza tema aggiungi la sezione "LOOXMAX PAS" al template prodotto.
+{% endcomment %}
+
+<section class="lxm" id="lxm-{{ section.id }}">
+  <div class="lxm__wrap">
+
+    <div class="lxm__block lxm__block--hero">
+      <h2 class="lxm__h1">{{ section.settings.hero_title }}</h2>
+      <p class="lxm__lead">{{ section.settings.hero_text }}</p>
+    </div>
+
+    <div class="lxm__block">
+      <span class="lxm__tag">Il problema</span>
+      <h3 class="lxm__h2">{{ section.settings.problem_title }}</h3>
+      <div class="lxm__rte">{{ section.settings.problem_text }}</div>
+    </div>
+
+    <div class="lxm__block lxm__block--dark">
+      <span class="lxm__tag">Il costo di non agire</span>
+      <h3 class="lxm__h2">{{ section.settings.agitate_title }}</h3>
+      <div class="lxm__rte">{{ section.settings.agitate_text }}</div>
+    </div>
+
+    <div class="lxm__block">
+      <span class="lxm__tag">La soluzione</span>
+      <h3 class="lxm__h2">{{ section.settings.solution_title }}</h3>
+      <div class="lxm__rte">{{ section.settings.solution_text }}</div>
+
+      {% if section.blocks.size > 0 %}
+        <div class="lxm__grid">
+          {% for block in section.blocks %}
+            <div class="lxm__card" {{ block.shopify_attributes }}>
+              <strong>{{ block.settings.title }}</strong>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="lxm__block lxm__block--cta">
+      <h3 class="lxm__h2">{{ section.settings.cta_title }}</h3>
+      <a href="#MainProduct-{{ product.id }}" class="lxm__btn" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+        {{ section.settings.cta_label }}
+      </a>
+      <p class="lxm__small">Spedizione gratuita · Pacco anonimo · Garanzia 30 giorni</p>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #lxm-{{ section.id }} { --lxm-bg:#0B0B0C; --lxm-card:#2A2A2E; --lxm-text:#F4F1EA; --lxm-gold:#C8A24A;
+    background:var(--lxm-bg); color:var(--lxm-text); padding:56px 16px; }
+  #lxm-{{ section.id }} .lxm__wrap { max-width:760px; margin:0 auto; }
+  #lxm-{{ section.id }} .lxm__block { padding:40px 0; border-bottom:1px solid rgba(244,241,234,.08); }
+  #lxm-{{ section.id }} .lxm__block--dark { background:var(--lxm-card); padding:40px 24px; border-radius:12px; border:0; margin:24px 0; }
+  #lxm-{{ section.id }} .lxm__block--hero, #lxm-{{ section.id }} .lxm__block--cta { text-align:center; border:0; }
+  #lxm-{{ section.id }} .lxm__h1 { font-size:clamp(32px,6vw,56px); line-height:1.05; text-transform:uppercase; letter-spacing:.02em; margin:0 0 16px; color:var(--lxm-text); }
+  #lxm-{{ section.id }} .lxm__h2 { font-size:clamp(24px,4vw,34px); line-height:1.15; margin:8px 0 16px; color:var(--lxm-text); }
+  #lxm-{{ section.id }} .lxm__lead { font-size:18px; opacity:.85; }
+  #lxm-{{ section.id }} .lxm__tag { color:var(--lxm-gold); text-transform:uppercase; font-size:12px; letter-spacing:.2em; font-weight:700; }
+  #lxm-{{ section.id }} .lxm__rte { font-size:17px; line-height:1.65; opacity:.9; }
+  #lxm-{{ section.id }} .lxm__rte strong { color:var(--lxm-gold); }
+  #lxm-{{ section.id }} .lxm__grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:24px; }
+  #lxm-{{ section.id }} .lxm__card { background:var(--lxm-card); padding:20px; border-radius:10px; }
+  #lxm-{{ section.id }} .lxm__card p { margin:6px 0 0; opacity:.8; font-size:15px; }
+  #lxm-{{ section.id }} .lxm__btn { display:inline-block; background:var(--lxm-gold); color:#0B0B0C; font-weight:800; text-transform:uppercase;
+    letter-spacing:.06em; padding:18px 36px; border-radius:6px; text-decoration:none; margin-top:8px; }
+  #lxm-{{ section.id }} .lxm__small { font-size:13px; opacity:.6; margin-top:14px; }
+</style>
+
+{% schema %}
+{
+  "name": "LOOXMAX PAS",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "hero_title", "label": "Hero titolo", "default": "Smetti di sentirti piccolo." },
+    { "type": "text", "id": "hero_text", "label": "Hero testo", "default": "Qualche centimetro cambia il modo in cui ti guardano. E il modo in cui ti guardi tu." },
+    { "type": "text", "id": "problem_title", "label": "Problema titolo", "default": "Lo sai già. Non serve che te lo dica nessuno." },
+    { "type": "richtext", "id": "problem_text", "label": "Problema testo",
+      "default": "<p>Sei quello che in foto si mette davanti. Quello che controlla quanto è alta <em>lei</em> prima ancora di scriverle. Quello che legge \"solo ragazzi sopra 1.80\" e chiude l'app.</p><p>Nessuno ne parla. Ma tutti lo notano. <strong>E tu lo sai.</strong></p>" },
+    { "type": "text", "id": "agitate_title", "label": "Agitazione titolo", "default": "Ogni giorno che aspetti, paghi un prezzo." },
+    { "type": "richtext", "id": "agitate_text", "label": "Agitazione testo",
+      "default": "<p><strong>Occasioni perse.</strong> Il primo appuntamento che non hai mai chiesto.</p><p><strong>Sicurezza.</strong> Ti fai più piccolo nella postura, nella voce, nelle decisioni.</p><p><strong>Tempo.</strong> Un altro anno a pensare \"è fatta così\".</p><p>L'altezza non la scegli. Come ti presenti al mondo, sì. E restare fermo è la scelta più costosa di tutte.</p>" },
+    { "type": "text", "id": "solution_title", "label": "Soluzione titolo", "default": "LOOXMAX Elevate™: fino a +7 cm, invisibili." },
+    { "type": "richtext", "id": "solution_text", "label": "Soluzione testo",
+      "default": "<p>Le metti nelle scarpe che hai già. Ti alzi. Ti guardi allo specchio. E per la prima volta da tanto tempo, <strong>guardi il mondo dritto negli occhi.</strong></p>" },
+    { "type": "text", "id": "cta_title", "label": "CTA titolo", "default": "Become the Better Man." },
+    { "type": "text", "id": "cta_label", "label": "CTA pulsante", "default": "Voglio i miei +7 cm" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Beneficio",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titolo", "default": "📏 Regolabili a strati" },
+        { "type": "textarea", "id": "text", "label": "Testo", "default": "Parti da +3 cm e sali fino a +7 cm." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LOOXMAX PAS",
+      "blocks": [
+        { "type": "benefit", "settings": { "title": "📏 Regolabili a strati", "text": "Parti da +3 cm e sali fino a +7 cm al tuo ritmo." } },
+        { "type": "benefit", "settings": { "title": "👟 Invisibili", "text": "Stanno dentro sneakers, boots e scarpe eleganti." } },
+        { "type": "benefit", "settings": { "title": "☁️ Comfort tutto il giorno", "text": "Memory foam + gel sul tallone." } },
+        { "type": "benefit", "settings": { "title": "🔒 Il tuo segreto", "text": "Pacco anonimo, nessun logo all'esterno." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
