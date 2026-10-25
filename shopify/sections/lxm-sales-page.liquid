@@ -1,0 +1,302 @@
+{%- comment -%}
+  LOOXMAX — Sales page IT (stile info-business).
+  Hero (headline pain + subheadline offerta) → immagini prodotto → Problema → Agitazione → Soluzione
+  → Stack offerta → Garanzia → FAQ → CTA finale. Ogni CTA porta alla pagina prodotto (selezione bundle).
+  Le immagini vengono prese dalle foto del prodotto: basta caricarle sul prodotto in Shopify.
+{%- endcomment -%}
+{%- liquid
+  assign p = all_products[section.settings.product_handle]
+  assign buy_url = p.url
+  if buy_url == blank
+    assign buy_url = '/products/' | append: section.settings.product_handle
+  endif
+  assign cta = section.settings.cta_label
+-%}
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+#lxm { --bg:#0b0b0c; --surface:#151517; --card:#1f1f23; --ink:#f4f1ea; --muted:#b9b3a8; --gold:#c8a24a; --line:#2c2c31; --red:#c0392b;
+  background:var(--bg); color:var(--ink); font-family:Inter,system-ui,sans-serif; }
+#lxm * { box-sizing:border-box; }
+#lxm img { max-width:100%; display:block; }
+#lxm .wrap { max-width:1080px; margin:0 auto; padding:0 16px; }
+#lxm .narrow { max-width:740px; margin:0 auto; }
+#lxm section { padding:64px 0; }
+#lxm section:nth-of-type(even) { background:var(--surface); }
+#lxm h1, #lxm h2, #lxm h3 { color:var(--ink); margin:0 0 16px; text-wrap:balance; }
+#lxm h1, #lxm h2 { font-family:Oswald,Impact,sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.01em; }
+#lxm h1 { font-size:clamp(2rem,6.2vw,3.4rem); line-height:1.05; text-align:center; }
+#lxm h2 { font-size:clamp(1.6rem,4.2vw,2.5rem); line-height:1.1; }
+#lxm h2 em, #lxm h1 em { font-style:normal; color:var(--gold); }
+#lxm p { color:var(--muted); font-size:1.08rem; line-height:1.65; margin:0 0 14px; }
+#lxm b, #lxm strong { color:var(--ink); }
+#lxm .center { text-align:center; }
+#lxm .bar { background:var(--gold); color:#0b0b0c; text-align:center; padding:10px 16px; font-size:.92rem; font-weight:600; }
+#lxm .bar b { color:#0b0b0c; font-weight:800; }
+#lxm .logo { text-align:center; padding:16px; border-bottom:1px solid var(--line); font:700 1.5rem Oswald,sans-serif; letter-spacing:.32em; color:var(--ink); }
+#lxm .logo span { color:var(--gold); }
+#lxm .kicker { display:block; text-align:center; color:var(--gold); font-weight:800; letter-spacing:.2em; text-transform:uppercase; font-size:.8rem; margin-bottom:12px; }
+#lxm .sub { color:var(--ink); font-size:1.15rem; line-height:1.55; text-align:center; max-width:720px; margin:0 auto 24px; }
+#lxm .btn { display:flex; align-items:center; justify-content:center; width:100%; max-width:520px; margin:0 auto; min-height:64px; padding:0 24px; border-radius:8px;
+  background:var(--gold); color:#0b0b0c; font-weight:800; font-size:1.1rem; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; }
+#lxm .btn:hover { filter:brightness(1.08); }
+#lxm .tl { display:flex; flex-wrap:wrap; gap:6px 16px; justify-content:center; margin:12px 0 0; color:var(--ink); font-size:.9rem; font-weight:600; }
+/* galleria */
+#lxm .gal { display:grid; grid-template-columns:2fr 1fr 1fr; grid-auto-rows:1fr; gap:10px; margin:0 0 24px; }
+#lxm .gal > * { border-radius:14px; overflow:hidden; background:var(--card); aspect-ratio:1; }
+#lxm .gal > :first-child { grid-row:span 2; aspect-ratio:auto; }
+#lxm .gal img { width:100%; height:100%; object-fit:cover; }
+#lxm .ph { display:grid; place-items:center; text-align:center; padding:12px; border:2px dashed #4a4334; color:#8d8370; font-size:.85rem; font-weight:600; }
+/* liste */
+#lxm .ck { list-style:none; padding:0; margin:22px 0 0; display:grid; gap:12px; }
+#lxm .ck li { display:grid; grid-template-columns:28px 1fr; gap:12px; align-items:start; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; color:var(--ink); font-size:1.04rem; line-height:1.5; }
+#lxm .ck svg { width:22px; height:22px; fill:none; stroke:var(--gold); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; margin-top:2px; }
+#lxm .ck.neg svg { stroke:var(--red); }
+#lxm .ck span { color:var(--muted); }
+#lxm .story p { color:var(--ink); font-size:1.12rem; }
+#lxm .punch { font:700 clamp(1.3rem,3.4vw,1.7rem)/1.3 Oswald,sans-serif; text-transform:uppercase; color:var(--gold); margin-top:22px; }
+#lxm .steps { list-style:none; padding:0; margin:32px 0 0; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; text-align:left; }
+#lxm .steps li { border-top:2px solid var(--gold); padding-top:14px; }
+#lxm .steps em { font:700 2rem/1 Oswald,sans-serif; font-style:normal; color:var(--gold); display:block; margin-bottom:8px; }
+#lxm .steps b { display:block; margin-bottom:4px; }
+#lxm .steps span { color:var(--muted); font-size:.98rem; }
+/* confronto */
+#lxm .cmp-wrap { overflow-x:auto; margin-top:28px; }
+#lxm .cmp { width:100%; min-width:560px; border-collapse:collapse; }
+#lxm .cmp th, #lxm .cmp td { padding:13px 10px; text-align:center; border-bottom:1px solid var(--line); font-size:.95rem; color:var(--muted); }
+#lxm .cmp td:first-child, #lxm .cmp th:first-child { text-align:left; color:var(--ink); }
+#lxm .cmp thead th { color:var(--ink); font-weight:700; }
+#lxm .cmp .us { background:rgba(200,162,74,.12); color:var(--ink); font-weight:700; }
+#lxm .cmp thead .us { background:var(--gold); color:#0b0b0c; }
+/* stack */
+#lxm .offer { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:36px; align-items:center; margin-top:28px; }
+#lxm .offer .media { aspect-ratio:1; border-radius:16px; overflow:hidden; background:var(--card); }
+#lxm .offer .media img { width:100%; height:100%; object-fit:cover; }
+#lxm .stack { list-style:none; padding:0; margin:0 0 20px; }
+#lxm .stack li { display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:start; padding:14px 0; border-bottom:1px solid var(--line); }
+#lxm .stack svg { width:22px; height:22px; fill:none; stroke:var(--gold); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; margin-top:2px; }
+#lxm .stack b { display:block; }
+#lxm .stack small { display:block; color:var(--muted); font-size:.92rem; line-height:1.45; margin-top:3px; }
+#lxm .stack .v { color:var(--gold); font-weight:700; white-space:nowrap; font-size:.9rem; }
+#lxm .bundles { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 20px; }
+#lxm .bundles div { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; text-align:center; position:relative; }
+#lxm .bundles div.hot { border-color:var(--gold); }
+#lxm .bundles b { display:block; font-size:1rem; }
+#lxm .bundles small { color:var(--muted); font-size:.82rem; }
+#lxm .bundles i { position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:#0b0b0c; font:800 .62rem Inter,sans-serif; font-style:normal; letter-spacing:.06em; text-transform:uppercase; border-radius:99px; padding:3px 8px; white-space:nowrap; }
+/* garanzia */
+#lxm .guar { max-width:700px; margin:0 auto; display:grid; grid-template-columns:110px 1fr; gap:24px; align-items:center; border:1px solid var(--gold); border-radius:16px; padding:26px; }
+#lxm .badge { width:110px; height:110px; border-radius:50%; border:2px solid var(--gold); display:grid; place-content:center; text-align:center; line-height:1; color:var(--gold); }
+#lxm .badge b { font:700 2rem Oswald,sans-serif; color:var(--gold); }
+#lxm .badge span { font-size:.66rem; letter-spacing:.12em; font-weight:800; }
+#lxm .guar h2 { font-size:1.6rem; margin-bottom:8px; }
+#lxm .guar p { margin:0; }
+/* faq */
+#lxm .faq { max-width:760px; margin:28px auto 0; }
+#lxm .faq details { border-bottom:1px solid var(--line); }
+#lxm .faq summary { cursor:pointer; list-style:none; font-weight:600; font-size:1.05rem; padding:18px 32px 18px 0; position:relative; color:var(--ink); }
+#lxm .faq summary::-webkit-details-marker { display:none; }
+#lxm .faq summary::after { content:"+"; position:absolute; right:4px; top:12px; font-size:1.6rem; color:var(--gold); transition:transform .2s; }
+#lxm .faq details[open] summary::after { transform:rotate(45deg); }
+#lxm .note { font-size:.8rem; color:#7d776d; text-align:center; margin-top:28px; }
+#lxm footer.site { padding:28px 16px 100px; text-align:center; color:#7d776d; font-size:.82rem; border-top:1px solid var(--line); }
+#lxm footer.site a { color:#7d776d; }
+#lxm .sticky { display:none; }
+@media (max-width:800px) {
+  #lxm section { padding:44px 0; }
+  #lxm .gal { grid-template-columns:1fr 1fr; }
+  #lxm .gal > :first-child { grid-column:span 2; grid-row:auto; aspect-ratio:1; }
+  #lxm .offer, #lxm .steps { grid-template-columns:1fr; gap:20px; }
+  #lxm .guar { grid-template-columns:1fr; text-align:center; justify-items:center; }
+  #lxm .sticky { display:block; position:fixed; left:0; right:0; bottom:0; z-index:50; padding:10px 16px calc(10px + env(safe-area-inset-bottom)); background:var(--surface); border-top:1px solid var(--line); transform:translateY(110%); transition:transform .25s; }
+  #lxm .sticky.on { transform:none; }
+  #lxm .sticky .btn { min-height:54px; font-size:1rem; }
+}
+</style>
+
+<div id="lxm">
+  <div class="bar"><b>SPEDIZIONE GRATUITA</b> · Pacco anonimo · Garanzia 30 giorni "Più Alto o Rimborsato"</div>
+  <div class="logo">LOO<span>X</span>MAX</div>
+
+  <!-- HERO: headline pain + subheadline offerta -->
+  <section class="hero-sec" style="padding-top:36px">
+    <div class="wrap">
+      <span class="kicker">Per l'uomo che è stanco di guardare tutti dal basso</span>
+      <h1>Stanco di essere <em>il più basso della stanza</em>: in foto, agli appuntamenti e ogni volta che lei mette i tacchi?</h1>
+      <p class="sub">Le solette <b>LOOXMAX Elevate™</b> ti danno <b>fino a +7 cm in 10 secondi</b>. Sono invisibili dentro le scarpe che hai già e nessuno lo saprà mai. <b>Provale 30 giorni: se non ti senti più sicuro, ti rimborsiamo ogni centesimo.</b></p>
+
+      <div class="gal">
+        {%- for i in (0..4) -%}
+          {%- assign img = p.images[i] -%}
+          {%- if img -%}
+            <div>{{ img | image_url: width: 1000 | image_tag: loading: 'lazy', alt: p.title, sizes: '(max-width: 800px) 100vw, 540px' }}</div>
+          {%- else -%}
+            <div class="ph">Foto prodotto {{ i | plus: 1 }}<br>(caricala sul prodotto)</div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <a href="{{ buy_url }}" class="btn">{{ cta }}</a>
+      <p class="tl"><span>✔ Fino a +7 cm</span><span>✔ 100% invisibili</span><span>✔ Spedizione gratuita</span><span>✔ Garanzia 30 giorni</span></p>
+    </div>
+  </section>
+
+  <!-- 1. PROBLEMA -->
+  <section>
+    <div class="wrap narrow center story">
+      <span class="kicker">Il problema</span>
+      <h2>Sono le 21. Hai un appuntamento. E la prima cosa a cui pensi <em>è quanto è alta lei.</em></h2>
+      <p>Controlli il suo profilo. Riguardi le foto. Ti chiedi se metterà i tacchi.</p>
+      <p>Al bar ti siedi subito, così non si nota. Nelle foto di gruppo ti metti davanti. Quando stringi la mano a qualcuno, alzi lo sguardo.</p>
+      <p>Apri un'app di incontri e leggi: <i>"solo ragazzi sopra 1,80"</i>. La chiudi.</p>
+      <p>Non ne parli con nessuno. Ma ci pensi. <b>Ogni giorno.</b></p>
+      <p class="punch">Il problema non sono i centimetri. È come ti fanno sentire: più piccolo di quello che sei.</p>
+    </div>
+  </section>
+
+  <!-- 2. AGITAZIONE: costo del non agire -->
+  <section>
+    <div class="wrap narrow center">
+      <span class="kicker">Il costo di non fare niente</span>
+      <h2>Se lasci tutto com'è, <em>ecco cosa ti aspetta</em></h2>
+      <ul class="ck neg">
+        <li><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Altri appuntamenti che non chiedi.</b> Perché "tanto lei è troppo alta per me", ancora prima di provarci.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>La sicurezza che cala, giorno dopo giorno.</b> Ti fai piccolo nella postura, nella voce, nelle decisioni. E gli altri lo percepiscono.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Le foto che eviti.</b> Matrimoni, serate, vacanze: tu ai bordi, o non ci sei proprio.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Le scarpe "col tacco da uomo" che si notano da lontano.</b> O le solette da 5 € che dopo un'ora ti distruggono i piedi.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg><span><b>Un altro anno a dirti "è fatta così".</b> Mentre gli altri entrano nella stanza come se fosse loro.</span></li>
+      </ul>
+      <p style="margin-top:24px">L'altezza non l'hai scelta. <b>Come ti presenti al mondo, sì.</b> E restare fermo è la scelta che costa di più.</p>
+    </div>
+  </section>
+
+  <!-- 3. SOLUZIONE -->
+  <section>
+    <div class="wrap narrow center">
+      <span class="kicker">La soluzione</span>
+      <h2>Per questo abbiamo creato <em>LOOXMAX Elevate™</em></h2>
+      <p>Le solette rialzanti che ti permettono di:</p>
+      <ul class="ck">
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Guadagnare fino a +7 cm subito</b>, con strati regolabili: parti basso e sali al tuo ritmo.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Usare le scarpe che hai già</b>: sneakers, stivaletti, scarpe eleganti. Nessuno vede niente.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Camminare comodo tutto il giorno</b>: memory foam e cuscinetto in gel sotto il tallone.</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Stare più dritto</b>: più altezza vuol dire spalle aperte e petto in fuori. La presenza viene da sé.</span></li>
+      </ul>
+
+      <ol class="steps">
+        <li><em>01</em><b>Scegli l'altezza</b><span>Componi gli strati: da +3 cm fino a +7 cm.</span></li>
+        <li><em>02</em><b>Inseriscile</b><span>Togli la soletta originale se serve spazio. Ritagliale sul tuo numero.</span></li>
+        <li><em>03</em><b>Cammina più alto</b><span>Da subito. I primi giorni parti dallo strato più basso.</span></li>
+      </ol>
+
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <thead><tr><th></th><th class="us">LOOXMAX Elevate™</th><th>Solette economiche</th><th>Scarpe rialzate</th></tr></thead>
+          <tbody>
+            <tr><td>Invisibili da fuori</td><td class="us">✔</td><td>✔</td><td>✖</td></tr>
+            <tr><td>Altezza regolabile</td><td class="us">✔ fino a +7 cm</td><td>✖ fissa</td><td>✖ fissa</td></tr>
+            <tr><td>Con le scarpe che hai già</td><td class="us">✔</td><td>✔</td><td>✖</td></tr>
+            <tr><td>Memory foam + gel</td><td class="us">✔</td><td>✖</td><td>Dipende</td></tr>
+            <tr><td>Garanzia 30 giorni</td><td class="us">✔</td><td>✖</td><td>✖</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK OFFERTA -->
+  <section id="offerta">
+    <div class="wrap">
+      <div class="center narrow">
+        <span class="kicker">L'offerta</span>
+        <h2>Ecco tutto quello che <em>ricevi oggi</em></h2>
+      </div>
+      <div class="offer">
+        <div class="media">
+          {%- assign img = p.images[1] | default: p.featured_image -%}
+          {%- if img -%}{{ img | image_url: width: 900 | image_tag: loading: 'lazy', alt: 'Cosa ricevi con LOOXMAX Elevate' }}{%- else -%}<div class="ph" style="height:100%">Foto "cosa ricevi"<br>(kit solette + strati)</div>{%- endif -%}
+        </div>
+        <div>
+          <ul class="stack">
+            <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Kit solette LOOXMAX Elevate™</b><small>Un paio di solette (destra + sinistra) con strati sovrapponibili, fino a +7 cm. Taglia unica da ritagliare sul tuo numero. È quello che ti fa entrare in una stanza a testa alta.</small></span><span class="v">Incluso</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Pacco 100% anonimo</b><small>Nessun logo e nessuna scritta sulla scatola. Chi ti consegna il pacco, o chi vive con te, non saprà cosa c'è dentro. Il tuo segreto resta tuo.</small></span><span class="v">Incluso</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Spedizione gratuita con tracking</b><small>Nessun costo a sorpresa e segui il pacco giorno per giorno. Parte entro 1-3 giorni, arriva in 7-14 giorni lavorativi.</small></span><span class="v">Inclusa</span></li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Garanzia "Più Alto o Rimborsato" 30 giorni</b><small>Indossale per un mese intero. Se non ti senti più sicuro, scrivici e ti rimborsiamo tutto, senza domande. Il rischio è tutto nostro.</small></span><span class="v">Inclusa</span></li>
+          </ul>
+          <div class="bundles">
+            <div><b>1 paio</b><small>{% if p.variants[0] %}{{ p.variants[0].price | money_without_trailing_zeros }} · {% endif %}Per iniziare</small></div>
+            <div class="hot"><i>Il più scelto</i><b>2 paia</b><small>{% if p.variants[1] %}{{ p.variants[1].price | money_without_trailing_zeros }} · {% endif %}Sneakers + eleganti</small></div>
+            <div><b>3 paia</b><small>{% if p.variants[2] %}{{ p.variants[2].price | money_without_trailing_zeros }} · {% endif %}Miglior prezzo</small></div>
+          </div>
+          <a href="{{ buy_url }}" class="btn">{{ cta }}</a>
+          <p class="tl"><span>Scegli il pacchetto nella pagina successiva</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} RECENSIONI: inserire qui solo recensioni VERE (es. widget Judge.me / Loox) quando arrivano. {%- endcomment -%}
+
+  <!-- GARANZIA -->
+  <section>
+    <div class="wrap">
+      <div class="guar">
+        <div class="badge"><b>30</b><span>GIORNI</span></div>
+        <div>
+          <h2>Più alto o rimborsato</h2>
+          <p>Indossale per 30 giorni. Al lavoro, agli appuntamenti, nel weekend. Se non ti senti più sicuro, scrivici e ti rimborsiamo ogni centesimo, senza moduli e senza domande. In più hai i 14 giorni di recesso previsti dalla legge.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="wrap center"><h2>Prima di ordinare</h2></div>
+    <div class="wrap">
+      <div class="faq">
+        <details><summary>Si vedono da fuori?</summary><p>No, stanno dentro la scarpa. Con sneakers alte, stivaletti e scarpe eleganti chiuse non si vedono. Con scarpe molto basse ti consigliamo di restare su +3/+5 cm.</p></details>
+        <details><summary>Sono comode?</summary><p>Sì: memory foam e gel sotto il tallone. I primi 2-3 giorni usa lo strato più basso, così il piede si abitua, poi sali.</p></details>
+        <details><summary>Che taglia devo prendere?</summary><p>Sono taglia unica: le ritagli sul tuo numero seguendo le linee guida stampate sotto la soletta.</p></details>
+        <details><summary>Perché arrivano in 7-14 giorni?</summary><p>Le spediamo dal magazzino del nostro partner logistico: per questo la spedizione è gratuita. Il pacco parte entro 1-3 giorni lavorativi e hai il tracking dal primo giorno.</p></details>
+        <details><summary>Perché dovrei prenderne 2 o 3 paia?</summary><p>Così non devi spostarle da una scarpa all'altra: un paio nelle sneakers, uno nelle scarpe eleganti, uno negli stivaletti. E il prezzo a paio scende.</p></details>
+        <details><summary>Chi c'è dietro questo negozio?</summary><p>LOOXMAX è un brand nuovo e te lo diciamo chiaramente. Il venditore è Daniele Silvestri, P.IVA IT10171611212. Rispondiamo entro 24 ore nei giorni lavorativi: danielesilvestri13@gmail.com.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINALE -->
+  <section id="lxm-end">
+    <div class="wrap narrow center">
+      <h2>L'uomo che vuoi essere è <em>qualche centimetro più in alto.</em></h2>
+      <p>Domani puoi entrare nella stanza come hai sempre fatto, oppure a testa alta.</p>
+      <a href="{{ buy_url }}" class="btn">{{ cta }}</a>
+      <p class="tl"><span>✔ Garanzia 30 giorni</span><span>✔ Spedizione gratuita</span><span>✔ Pacco anonimo</span><span>✔ Pagamento sicuro</span></p>
+      <p class="note">Le solette LOOXMAX Elevate™ sono un accessorio per calzature, non un dispositivo medico. In caso di problemi a piedi, caviglie o schiena consulta un medico prima dell'uso.</p>
+    </div>
+  </section>
+
+  <footer class="site">© {{ 'now' | date: '%Y' }} LOOXMAX · Become the Better Man<br>Daniele Silvestri · P.IVA IT10171611212 · danielesilvestri13@gmail.com</footer>
+  <div class="sticky" data-sticky><a href="{{ buy_url }}" class="btn">{{ cta }}</a></div>
+</div>
+
+<script>
+(function () {
+  var s = document.querySelector('#lxm [data-sticky]'), h = document.querySelector('#lxm .hero-sec'), e = document.getElementById('lxm-end');
+  if (!s || !('IntersectionObserver' in window)) return;
+  var a = false, b = false, u = function () { s.classList.toggle('on', a && !b); };
+  new IntersectionObserver(function (x) { a = !x[0].isIntersecting; u(); }).observe(h);
+  new IntersectionObserver(function (x) { b = x[0].isIntersecting; u(); }).observe(e);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "LOOXMAX sales page IT",
+  "settings": [
+    { "type": "text", "id": "product_handle", "label": "Handle prodotto", "default": "looxmax-elevate" },
+    { "type": "text", "id": "cta_label", "label": "Testo pulsante", "default": "Voglio i miei +7 cm" }
+  ],
+  "presets": [{ "name": "LOOXMAX sales page IT" }]
+}
+{% endschema %}

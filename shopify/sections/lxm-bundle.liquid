@@ -1,0 +1,118 @@
+{%- comment -%}
+  LOOXMAX — Pagina prodotto con selezione bundle.
+  Ogni variante del prodotto = un pacchetto (1 / 2 / 3 paia). "Aggiungi al carrello" porta direttamente al carrello.
+{%- endcomment -%}
+{%- assign current = product.selected_or_first_available_variant -%}
+{%- if product.variants.size > 1 -%}{%- assign current = product.variants[1] -%}{%- endif -%}
+<style>
+#lxb { --bg:#0b0b0c; --card:#1f1f23; --ink:#f4f1ea; --muted:#b9b3a8; --gold:#c8a24a; --line:#2c2c31;
+  background:var(--bg); color:var(--ink); font-family:Inter,system-ui,sans-serif; padding:28px 0 64px; }
+#lxb * { box-sizing:border-box; }
+#lxb .wrap { max-width:1080px; margin:0 auto; padding:0 16px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:40px; align-items:start; }
+#lxb .media { display:grid; gap:10px; }
+#lxb .media .main { aspect-ratio:1; border-radius:16px; overflow:hidden; background:var(--card); }
+#lxb .media .main img { width:100%; height:100%; object-fit:cover; display:block; }
+#lxb .thumbs { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+#lxb .thumbs button { aspect-ratio:1; padding:0; border:2px solid transparent; border-radius:10px; overflow:hidden; background:var(--card); cursor:pointer; }
+#lxb .thumbs button[aria-current="true"] { border-color:var(--gold); }
+#lxb .thumbs img { width:100%; height:100%; object-fit:cover; display:block; }
+#lxb .ph { display:grid; place-items:center; height:100%; color:#8d8370; border:2px dashed #4a4334; border-radius:16px; font-weight:600; }
+#lxb h1 { font:700 clamp(1.6rem,4vw,2.3rem)/1.1 Oswald,Impact,sans-serif; text-transform:uppercase; margin:0 0 10px; color:var(--ink); }
+#lxb .lead { color:var(--muted); font-size:1.05rem; line-height:1.55; margin:0 0 18px; }
+#lxb .pts { list-style:none; padding:0; margin:0 0 20px; display:grid; gap:8px; }
+#lxb .pts li { color:var(--ink); font-size:1rem; }
+#lxb .pts li::before { content:"✔"; color:var(--gold); font-weight:800; margin-right:10px; }
+#lxb .pick { display:grid; gap:12px; margin:0 0 16px; border:0; padding:0; }
+#lxb .pick legend { font-weight:800; letter-spacing:.12em; text-transform:uppercase; font-size:.8rem; color:var(--gold); margin-bottom:10px; }
+#lxb .pick label { display:grid; grid-template-columns:22px 1fr auto; gap:12px; align-items:center; border:1.5px solid var(--line); border-radius:14px; padding:16px; cursor:pointer; background:var(--card); position:relative; }
+#lxb .pick label:has(input:checked) { border-color:var(--gold); box-shadow:0 0 0 1px var(--gold); }
+#lxb .pick input { accent-color:var(--gold); width:18px; height:18px; margin:0; }
+#lxb .pick b { display:block; color:var(--ink); font-size:1.05rem; }
+#lxb .pick small { color:var(--muted); font-size:.88rem; }
+#lxb .pick .pr { text-align:right; font-weight:800; font-size:1.2rem; color:var(--ink); }
+#lxb .pick .pr s { display:block; font-weight:400; font-size:.88rem; color:var(--muted); }
+#lxb .pick .tag { position:absolute; top:-10px; right:14px; background:var(--gold); color:#0b0b0c; font-size:.68rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; border-radius:99px; padding:3px 10px; }
+#lxb .btn { width:100%; min-height:64px; border:0; border-radius:8px; background:var(--gold); color:#0b0b0c; font:800 1.1rem Inter,sans-serif; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; }
+#lxb .btn:hover { filter:brightness(1.08); }
+#lxb .btn[disabled] { opacity:.5; cursor:not-allowed; }
+#lxb .tl { display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:center; margin:12px 0 18px; font-size:.88rem; font-weight:600; color:var(--ink); }
+#lxb .risk { display:grid; grid-template-columns:56px 1fr; gap:14px; align-items:center; border:1px solid var(--gold); border-radius:14px; padding:14px; }
+#lxb .risk p { margin:0; color:var(--ink); font-size:.95rem; line-height:1.45; }
+#lxb .badge { width:56px; height:56px; border-radius:50%; border:2px solid var(--gold); display:grid; place-content:center; text-align:center; line-height:1; color:var(--gold); }
+#lxb .badge b { font:700 1.2rem Oswald,sans-serif; }
+#lxb .badge span { font-size:.55rem; font-weight:800; letter-spacing:.1em; }
+#lxb .desc { grid-column:1 / -1; max-width:760px; margin:20px auto 0; color:var(--muted); line-height:1.65; }
+#lxb .desc h2, #lxb .desc h3 { color:var(--ink); font-family:Oswald,sans-serif; text-transform:uppercase; }
+#lxb .desc strong { color:var(--ink); }
+@media (max-width:800px) { #lxb .wrap { grid-template-columns:1fr; gap:22px; } }
+</style>
+
+<div id="lxb">
+  <div class="wrap">
+    <div class="media">
+      <div class="main" data-main>
+        {%- if product.featured_image -%}
+          {{ product.featured_image | image_url: width: 1100 | image_tag: fetchpriority: 'high', alt: product.title, sizes: '(max-width: 800px) 100vw, 520px' }}
+        {%- else -%}
+          <div class="ph">Carica le foto sul prodotto</div>
+        {%- endif -%}
+      </div>
+      {%- if product.images.size > 1 -%}
+        <div class="thumbs" data-thumbs>
+          {%- for img in product.images limit: 10 -%}
+            <button type="button" data-src="{{ img | image_url: width: 1100 }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">{{ img | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}</button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div>
+      <h1>{{ product.title }}</h1>
+      <p class="lead">Fino a <b>+7 cm in 10 secondi</b>, invisibili dentro le scarpe che hai già.</p>
+      <ul class="pts">
+        <li>Strati regolabili fino a +7 cm</li>
+        <li>Memory foam + gel: comode tutto il giorno</li>
+        <li>Taglia unica, ritagliabile sul tuo numero</li>
+        <li>Pacco anonimo, nessun logo esterno</li>
+      </ul>
+
+      {%- form 'product', product, id: 'lxb-form' -%}
+        <input type="hidden" name="return_to" value="{{ routes.cart_url }}">
+        <fieldset class="pick">
+          <legend>Scegli il tuo pacchetto</legend>
+          {%- for v in product.variants -%}
+            {%- assign per_pair = v.price | divided_by: forloop.index -%}
+            <label>
+              {%- if forloop.index == 2 -%}<span class="tag">Il più scelto</span>{%- elsif forloop.index == 3 -%}<span class="tag">Miglior prezzo</span>{%- endif -%}
+              <input type="radio" name="id" value="{{ v.id }}" {% if v.id == current.id %}checked{% endif %} {% unless v.available %}disabled{% endunless %}>
+              <span><b>{{ v.title }}</b><small>{{ per_pair | money }} al paio{% if forloop.index > 1 %} · Spedizione gratuita{% endif %}</small></span>
+              <span class="pr">{% if v.compare_at_price > v.price %}<s>{{ v.compare_at_price | money }}</s>{% endif %}{{ v.price | money }}</span>
+            </label>
+          {%- endfor -%}
+        </fieldset>
+        <button type="submit" name="add" class="btn" {% unless product.available %}disabled{% endunless %}>{% if product.available %}Aggiungi al carrello{% else %}Esaurito{% endif %}</button>
+      {%- endform -%}
+
+      <p class="tl"><span>✔ Spedizione gratuita</span><span>✔ Pagamento sicuro</span><span>✔ Arriva in 7-14 giorni</span></p>
+      <div class="risk"><div class="badge"><b>30</b><span>GIORNI</span></div><p><b>Più alto o rimborsato.</b> Indossale per 30 giorni: se non ti senti più sicuro, ti rimborsiamo tutto.</p></div>
+    </div>
+
+    {%- if product.description != blank -%}<div class="desc">{{ product.description }}</div>{%- endif -%}
+  </div>
+</div>
+
+<script>
+(function () {
+  var main = document.querySelector('#lxb [data-main] img'), t = document.querySelector('#lxb [data-thumbs]');
+  if (!main || !t) return;
+  t.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    main.src = b.dataset.src; main.removeAttribute('srcset');
+    [].forEach.call(t.children, function (x) { x.setAttribute('aria-current', x === b ? 'true' : 'false'); });
+  });
+})();
+</script>
+
+{% schema %}
+{ "name": "LOOXMAX bundle", "settings": [], "presets": [{ "name": "LOOXMAX bundle" }] }
+{% endschema %}
